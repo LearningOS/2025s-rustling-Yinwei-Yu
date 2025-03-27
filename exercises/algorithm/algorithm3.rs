@@ -3,10 +3,21 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
-	//TODO
+
+use std::mem::swap;
+
+fn sort<T:Ord>(array: &mut [T]){
+	let n = array.len();
+    for i in 0..n {
+        let mut min_index = i;
+        for j in i..n {
+            if array[j]<array[min_index] {
+                min_index = j;
+            }
+        }
+        array.swap(min_index, i)
+    }
 }
 #[cfg(test)]
 mod tests {
