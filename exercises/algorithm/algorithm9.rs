@@ -2,7 +2,7 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
+
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,7 +37,9 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.items.push(value);
+        self.count += 1;
+        self.bubble_up(self.count);
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -59,6 +61,43 @@ where
     fn smallest_child_idx(&self, idx: usize) -> usize {
         //TODO
 		0
+    }
+
+    fn bubble_up(&mut self, mut idx: usize) {
+        while idx > 1 {
+            let parent = self.parent_idx(idx); // 预存父节点索引
+            if (self.comparator)(&self.items[idx], &self.items[parent]) {
+                self.items.swap(idx, parent); 
+                idx = parent;
+            } else {
+                break;
+            }
+        }
+    }
+
+    fn bubble_down(&mut self, mut idx: usize) {
+        while self.children_present(idx) {
+            let mut child_idx = self.left_child_idx(idx);
+            if child_idx < self.count && (self.comparator)(&self.items[child_idx + 1], &self.items[child_idx]) {
+                child_idx += 1;
+            }
+            if (self.comparator)(&self.items[idx], &self.items[child_idx]) {
+                break;
+            }
+            self.items.swap(idx, child_idx);
+            idx = child_idx;
+        }
+    }
+
+    pub fn pop(&mut self) -> Option<T> {
+        if self.is_empty() {
+            return None;
+        }
+        self.items.swap(1, self.count);
+        let result = self.items.pop();
+        self.count -= 1;
+        self.bubble_down(1);
+        result
     }
 }
 
@@ -85,7 +124,13 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+        if self.len() == 0 {
+            return None;
+        }
+        
+        // 取出堆顶元素（在 BinaryHeap 中是第一个元素）
+        let result = self.pop();
+        result
     }
 }
 
